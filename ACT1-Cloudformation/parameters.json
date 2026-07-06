@@ -1,0 +1,22 @@
+[
+  {
+    "ParameterKey": "EnvironmentType",
+    "ParameterValue": "dev"
+  },
+  {
+    "ParameterKey": "VpcCidr",
+    "ParameterValue": "10.0.0.0/16"
+  },
+  {
+    "ParameterKey": "PublicSubnetCidr",
+    "ParameterValue": "10.0.1.0/24"
+  },
+  {
+    "ParameterKey": "KeyPairName",
+    "ParameterValue": "mi-keypair-modulo1"
+  },
+  {
+    "ParameterKey": "AllowedIP",
+    "ParameterValue": "0.0.0.0/0"
+  }
+]
