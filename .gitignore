@@ -1,0 +1,33 @@
+# AWS Credentials
+*.pem
+*.ppk
+credentials.json
+.aws/
+
+# Environment files
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+
+# CloudFormation outputs
+stack-outputs.json
+parameters-local.json
