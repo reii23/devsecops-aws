@@ -1,0 +1,65 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Laboratorio AWS CodeDeploy - Recursos de CodeDeploy (IAM Role, Application y
+  Deployment Group) para desplegar revisiones sobre la instancia EC2 creada en
+  01-infrastructure.yaml.
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: codedeploy-demo
+    Description: Nombre del proyecto, debe coincidir con el usado en 01-infrastructure.yaml.
+
+  EC2InstanceId:
+    Type: String
+    Description: ID de la instancia EC2 (output InstanceId del stack de infraestructura).
+
+Resources:
+
+  CodeDeployServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub ${ProjectName}-codedeploy-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codedeploy.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole
+      Tags:
+        - Key: Name
+          Value: !Sub ${ProjectName}-codedeploy-role
+
+  CodeDeployApplication:
+    Type: AWS::CodeDeploy::Application
+    Properties:
+      ApplicationName: !Sub ${ProjectName}-app
+      ComputePlatform: Server
+
+  CodeDeployDeploymentGroup:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    Properties:
+      ApplicationName: !Ref CodeDeployApplication
+      DeploymentGroupName: !Sub ${ProjectName}-dg
+      DeploymentConfigName: CodeDeployDefault.AllAtOnce
+      ServiceRoleArn: !GetAtt CodeDeployServiceRole.Arn
+      Ec2TagFilters:
+        - Key: Name
+          Value: !Sub ${ProjectName}-server
+          Type: KEY_AND_VALUE
+      AutoRollbackConfiguration:
+        Enabled: true
+        Events:
+          - DEPLOYMENT_FAILURE
+
+Outputs:
+  ApplicationName:
+    Description: Nombre de la aplicacion CodeDeploy
+    Value: !Ref CodeDeployApplication
+
+  DeploymentGroupName:
+    Description: Nombre del Deployment Group creado
+    Value: !Ref CodeDeployDeploymentGroup

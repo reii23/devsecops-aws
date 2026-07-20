@@ -31,3 +31,6 @@ logs/
 # CloudFormation outputs
 stack-outputs.json
 parameters-local.json
+
+# Virtual environments
+.venv/
